@@ -1,0 +1,83 @@
+<?php
+
+return [
+    'greeting' => 'Kepada Yth.',
+    'event_title' => 'Judul Acara Anda',
+    'tagline' => 'Tagline acara Anda',
+    'konfirmasi_heading' => 'Konfirmasi Kehadiran',
+    'konfirmasi_button' => 'Konfirmasi Kehadiran',
+    'lihat_konfirmasi' => 'Lihat Konfirmasi',
+    'konfirmasi_update' => 'Perbarui Konfirmasi',
+    'konfirmasi_success' => 'Konfirmasi berhasil disimpan!',
+    'konfirmasi_updated' => 'Konfirmasi berhasil diperbarui!',
+    'konfirmasi_terakhir' => 'Konfirmasi terakhir pada',
+    'batas_konfirmasi' => 'Batas konfirmasi',
+    'batas_konfirmasi_lewat' => 'Maaf, batas waktu konfirmasi telah berakhir.',
+    'jumlah_hadir' => 'Jumlah yang akan hadir',
+    'jumlah_hadir_max' => 'Maksimal :max orang',
+    'jumlah_hadir_invalid' => 'Harap isi jumlah yang akan hadir (minimal 1 orang). Jika berhalangan, gunakan tombol "Tidak Hadir".',
+    'tidak_hadir_button' => 'Saya Tidak Dapat Hadir',
+    'tidak_hadir_confirm' => 'Apakah Anda yakin tidak dapat hadir?',
+    'tidak_hadir_success' => 'Terima kasih atas konfirmasinya. Anda tercatat berhalangan hadir.',
+    'tidak_hadir_status' => 'Anda menyatakan berhalangan hadir.',
+    'luar_kota_section' => 'Transportasi',
+    'butuh_antar_jemput' => 'Apakah membutuhkan antar jemput?',
+    'tanggal_datang' => 'Tanggal kedatangan',
+    'tanggal_pulang' => 'Tanggal kepulangan',
+    'penginapan_section' => 'Penginapan',
+    'butuh_penginapan' => 'Apakah membutuhkan penginapan yang disediakan panitia?',
+    'apakah_ingin_ditempati' => 'Apakah ingin menempati penginapan yang disediakan?',
+    'jumlah_menginap_label' => 'Berapa orang yang akan menginap di penginapan yang disediakan?',
+    'jumlah_menginap_desc' => 'Boleh kurang dari :max orang (bila sebagian menginap di tempat lain). Isi 0 bila tidak mengambil penginapan yang disediakan.',
+    'jumlah_menginap_required' => 'Harap isi jumlah yang akan menginap.',
+    'jumlah_menginap_max' => 'Jumlah menginap tidak boleh melebihi jumlah yang hadir (:max orang).',
+    'penginapan_vvip_auto' => 'Penginapan telah disiapkan untuk Anda.',
+    'peserta_nama_kurang' => 'Baru :isi dari :total nama yang diisi. Anda bisa melanjutkan, namun nama yang belum diisi tidak akan tercatat.',
+    'jenis_kelamin_required' => 'Jenis kelamin wajib dipilih jika nama diisi.',
+    'contact_person' => 'Contact Person',
+    'contact_person_desc' => 'Untuk informasi lebih lanjut, hubungi:',
+    'status' => 'Status',
+    'undangan_untuk' => 'Undangan untuk :count orang',
+    'card_title' => 'Kartu Konfirmasi',
+    'card_jumlah' => 'Jumlah hadir',
+    'card_orang' => 'orang',
+    'card_dikonfirmasi' => 'Dikonfirmasi pada',
+    'card_download' => 'Download PDF',
+    'masuk' => 'Masuk',
+    'masuk_desc' => 'Ketuk untuk masuk ke undangan',
+    'ya' => 'Ya',
+    'tidak' => 'Tidak',
+    'ubah_jadwal' => 'Ubah Jadwal Kedatangan/Kepulangan',
+    'ubah_jadwal_desc' => 'Batas konfirmasi telah lewat, namun Anda masih bisa mengubah jadwal kedatangan dan kepulangan.',
+    'simpan_jadwal' => 'Simpan Jadwal',
+    'jadwal_updated' => 'Jadwal berhasil diperbarui!',
+
+    // Peserta
+    'peserta_heading' => 'Data Tamu yang Menginap',
+    'peserta_desc' => 'Masukkan nama tamu yang akan menginap di penginapan yang disediakan, beserta jenis kelamin dan nama pasangan (jika pasutri) untuk pengaturan kamar.',
+    'peserta_ke' => 'Tamu Menginap #:num',
+    'peserta_nama' => 'Nama lengkap',
+    'peserta_nama_required' => 'Nama tamu undangan wajib diisi.',
+    'jenis_kelamin' => 'Jenis Kelamin',
+    'laki_laki' => 'Laki-laki',
+    'perempuan' => 'Perempuan',
+    'nama_pasangan' => 'Nama pasangan (jika pasutri)',
+
+    // Sopir & Penginapan info
+    'sopir_info' => 'Informasi Transport',
+    'penginapan_info' => 'Informasi Penginapan',
+    'nomor_kamar' => 'Nomor Kamar',
+
+    'buka_maps' => 'Buka Maps',
+
+    'navigasi_acara' => 'Navigasi ke Lokasi Acara',
+
+    'navigasi_penginapan' => 'Navigasi ke Penginapan',
+
+    'lokasi_menginap_belum_publish' => 'Informasi lokasi penginapan akan segera diberitahukan.',
+
+    'no_telp_penginapan' => 'Telp. Penginapan',
+
+    // Jadwal section
+    'jadwal_section' => 'Jadwal Kedatangan & Kepulangan',
+];

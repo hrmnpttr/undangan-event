@@ -1,0 +1,83 @@
+<?php
+
+return [
+    'greeting' => 'Dear',
+    'event_title' => 'Your Event Title',
+    'tagline' => 'Your event tagline',
+    'konfirmasi_heading' => 'Attendance Confirmation',
+    'konfirmasi_button' => 'Confirm Attendance',
+    'lihat_konfirmasi' => 'View Confirmation',
+    'konfirmasi_update' => 'Update Confirmation',
+    'konfirmasi_success' => 'Confirmation saved successfully!',
+    'konfirmasi_updated' => 'Confirmation updated successfully!',
+    'konfirmasi_terakhir' => 'Last confirmed on',
+    'batas_konfirmasi' => 'Confirmation deadline',
+    'batas_konfirmasi_lewat' => 'Sorry, the confirmation deadline has passed.',
+    'jumlah_hadir' => 'Number of attendees',
+    'jumlah_hadir_max' => 'Maximum :max persons',
+    'jumlah_hadir_invalid' => 'Please enter the number of attendees (at least 1). If you cannot attend, use the "Cannot Attend" button.',
+    'tidak_hadir_button' => 'I Cannot Attend',
+    'tidak_hadir_confirm' => 'Are you sure you cannot attend?',
+    'tidak_hadir_success' => 'Thank you for your response. You are recorded as unable to attend.',
+    'tidak_hadir_status' => 'You have indicated that you cannot attend.',
+    'luar_kota_section' => 'Transportation',
+    'butuh_antar_jemput' => 'Do you need pickup and drop-off service?',
+    'tanggal_datang' => 'Arrival date',
+    'tanggal_pulang' => 'Departure date',
+    'penginapan_section' => 'Accommodation',
+    'butuh_penginapan' => 'Do you need accommodation provided by the committee?',
+    'apakah_ingin_ditempati' => 'Would you like to use the provided accommodation?',
+    'jumlah_menginap_label' => 'How many people will stay at the provided accommodation?',
+    'jumlah_menginap_desc' => 'Can be fewer than :max persons (if some will stay elsewhere). Enter 0 if you will not use the provided accommodation.',
+    'jumlah_menginap_required' => 'Please fill in the number of people staying.',
+    'jumlah_menginap_max' => 'Number staying cannot exceed total attendees (:max persons).',
+    'penginapan_vvip_auto' => 'Accommodation has been prepared for you.',
+    'peserta_nama_kurang' => 'Only :isi of :total names filled in. You may continue, but unfilled names will not be recorded.',
+    'jenis_kelamin_required' => 'Gender is required when a name is entered.',
+    'contact_person' => 'Contact Person',
+    'contact_person_desc' => 'For more information, please contact:',
+    'status' => 'Status',
+    'undangan_untuk' => 'Invitation for :count persons',
+    'card_title' => 'Confirmation Card',
+    'card_jumlah' => 'Attendees',
+    'card_orang' => 'persons',
+    'card_dikonfirmasi' => 'Confirmed on',
+    'card_download' => 'Download PDF',
+    'masuk' => 'Enter',
+    'masuk_desc' => 'Tap to enter the invitation',
+    'ya' => 'Yes',
+    'tidak' => 'No',
+    'ubah_jadwal' => 'Change Arrival/Departure Schedule',
+    'ubah_jadwal_desc' => 'The confirmation deadline has passed, but you can still change your arrival and departure dates.',
+    'simpan_jadwal' => 'Save Schedule',
+    'jadwal_updated' => 'Schedule updated successfully!',
+
+    // Peserta
+    'peserta_heading' => 'Overnight Guest Details',
+    'peserta_desc' => 'Enter the names of guests who will stay at the provided accommodation, along with gender and spouse name (if married couple) for room assignment.',
+    'peserta_ke' => 'Overnight Guest #:num',
+    'peserta_nama' => 'Full name',
+    'peserta_nama_required' => 'Attendee name is required.',
+    'jenis_kelamin' => 'Gender',
+    'laki_laki' => 'Male',
+    'perempuan' => 'Female',
+    'nama_pasangan' => 'Spouse name (if married)',
+
+    // Sopir & Penginapan info
+    'sopir_info' => 'Transport Information',
+    'penginapan_info' => 'Accommodation Information',
+    'nomor_kamar' => 'Room Number',
+
+    'buka_maps' => 'Open Maps',
+
+    'navigasi_acara' => 'Navigate to Venue',
+
+    'navigasi_penginapan' => 'Navigate to Hotel',
+
+    'lokasi_menginap_belum_publish' => 'Accommodation location will be announced soon.',
+
+    'no_telp_penginapan' => 'Hotel Phone',
+
+    // Jadwal section
+    'jadwal_section' => 'Arrival & Departure Schedule',
+];
