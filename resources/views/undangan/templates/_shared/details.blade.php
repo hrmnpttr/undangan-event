@@ -4,12 +4,19 @@
     $kind = $theme['kind'] ?? 'general';
     $venueName = $landing['venue_name'] ?? '';
     $venueAddress = $landing['venue_address'] ?? '';
-    $venueMaps = $landing['venue_maps'] ?: config('undangan.venue_maps');
-    $mapsUrl = $venueMaps
-        ? (\Illuminate\Support\Str::startsWith(strtolower($venueMaps), 'http')
-            ? $venueMaps
-            : 'https://www.google.com/maps/dir/?api=1&destination=' . urlencode($venueMaps))
-        : null;
+
+    // Free-map coordinates take priority; fall back to a Google search/URL.
+    $coords = \App\Support\LandingConfig::coords();
+    if ($coords) {
+        $mapsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' . $coords[0] . ',' . $coords[1];
+    } else {
+        $venueMaps = $landing['venue_maps'] ?: config('undangan.venue_maps');
+        $mapsUrl = $venueMaps
+            ? (\Illuminate\Support\Str::startsWith(strtolower($venueMaps), 'http')
+                ? $venueMaps
+                : 'https://www.google.com/maps/dir/?api=1&destination=' . urlencode($venueMaps))
+            : null;
+    }
 @endphp
 
 {{-- Quote / verse --}}
@@ -94,6 +101,49 @@
         <div class="u-divider"></div>
         @if($venueName)<p class="font-medium text-gray-800">{{ $venueName }}</p>@endif
         @if($venueAddress)<p class="text-sm text-gray-500 mt-1 whitespace-pre-line">{{ $venueAddress }}</p>@endif
+
+        {{-- Free embedded map (OpenStreetMap / Leaflet) — only when coordinates exist. --}}
+        @if($coords)
+            @assets
+                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+                    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+                    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+            @endassets
+
+            <div wire:ignore class="mt-4">
+                <div id="undangan-venue-map" class="h-56 w-full rounded-xl overflow-hidden ring-1 ring-black/10"
+                     style="background:#e5e7eb;" data-lat="{{ $coords[0] }}" data-lng="{{ $coords[1] }}"></div>
+            </div>
+
+            @script
+            <script>
+                (function () {
+                    const el = document.getElementById('undangan-venue-map');
+                    if (!el || el._leafletInit) return;
+                    const lat = parseFloat(el.dataset.lat), lng = parseFloat(el.dataset.lng);
+                    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+                    const start = () => {
+                        if (!window.L) { return setTimeout(start, 80); }
+                        el._leafletInit = true;
+                        const map = L.map(el, { scrollWheelZoom: false }).setView([lat, lng], 16);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19, attribution: '&copy; OpenStreetMap'
+                        }).addTo(map);
+                        const icon = L.divIcon({ className: '', html: '<div style="font-size:26px;line-height:1">📍</div>', iconSize: [26, 26], iconAnchor: [13, 26] });
+                        L.marker([lat, lng], { icon }).addTo(map);
+                        setTimeout(() => map.invalidateSize(), 200);
+                        // Redraw when the container becomes visible (guest taps "enter").
+                        if (window.ResizeObserver) {
+                            new ResizeObserver(() => map.invalidateSize()).observe(el);
+                        }
+                    };
+                    start();
+                })();
+            </script>
+            @endscript
+        @endif
+
         @if($mapsUrl)
             <a href="{{ $mapsUrl }}" target="_blank" rel="noopener"
                class="mt-3 inline-flex items-center gap-2 px-6 py-2 rounded-full text-sm btn-gold shadow">
@@ -101,7 +151,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
-                {{ app()->getLocale() === 'en' ? 'Open in Maps' : 'Buka Peta' }}
+                {{ app()->getLocale() === 'en' ? 'Open in Google Maps' : 'Buka di Google Maps' }}
             </a>
         @endif
     </div>

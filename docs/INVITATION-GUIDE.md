@@ -46,6 +46,27 @@ Log into the committee panel at `/panitia`.
 
 Empty fields are hidden automatically — only fill what you need.
 
+### Event location on a free map
+
+Under **Titik lokasi acara (peta gratis)** the designer shows an
+**OpenStreetMap** map — **free, no API key, no billing**. Set the point in any
+of three ways:
+
+- **Search** a place name and click **Cari** (free Nominatim/OSM search).
+- **Click directly on the map** to drop a marker.
+- **Paste coordinates** into the "Koordinat (lat, lng)" box, e.g.
+  `-6.200000, 106.816666`.
+
+Rules:
+
+- The map on the invitation **only appears once coordinates are set** — it stays
+  hidden otherwise.
+- Guests still get an **"Open in Google Maps"** button that routes to those
+  coordinates (redirect to Google Maps).
+- With no coordinates, that button falls back to the **Google Maps (URL/address)**
+  field.
+- Use **Hapus titik** to clear the coordinates.
+
 ---
 
 ## 3. Upload your own invitation & music

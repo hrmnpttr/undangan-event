@@ -31,6 +31,13 @@
             <li>Klik <strong>Simpan Desain</strong>. Perubahan langsung tampil di halaman undangan.</li>
         </ol>
 
+        <h3>Titik lokasi di peta (gratis)</h3>
+        <p>Pada bagian <strong>Titik lokasi acara (peta gratis)</strong> tersedia peta OpenStreetMap
+        (gratis, tanpa API key). Tentukan titik dengan <strong>mencari nama tempat</strong>,
+        <strong>klik di peta</strong>, atau <strong>menempel koordinat</strong> (mis. <code>-6.200000, 106.816666</code>).
+        Peta di undangan <strong>hanya muncul bila koordinat terisi</strong>, dan tamu tetap mendapat tombol
+        <strong>Buka di Google Maps</strong>.</p>
+
         <h3>Ukuran gambar yang disarankan</h3>
         <p>Satu gambar dipakai untuk HP &amp; desktop (di-crop otomatis) — <strong>tidak ada upload versi mobile terpisah</strong>. Utamakan gambar <strong>portrait</strong>, maks 8&nbsp;MB.</p>
         <table>

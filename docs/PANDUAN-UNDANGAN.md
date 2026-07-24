@@ -67,6 +67,27 @@ Login ke panel panitia di `/panitia`.
 > Bagian yang dikosongkan otomatis disembunyikan di halaman undangan, jadi Anda
 > hanya perlu mengisi yang relevan.
 
+### Titik lokasi acara di peta (gratis)
+
+Pada bagian **Titik lokasi acara (peta gratis)** di menu Desain Undangan,
+tersedia peta **OpenStreetMap** — **gratis, tanpa API key, tanpa tagihan**. Ada
+tiga cara menentukan titik:
+
+- **Cari** — ketik nama tempat lalu klik **Cari** (memakai pencarian gratis
+  Nominatim/OSM).
+- **Klik langsung di peta** untuk menaruh penanda.
+- **Tempel koordinat** pada kolom "Koordinat (lat, lng)", mis. `-6.200000, 106.816666`.
+
+Ketentuan:
+
+- Peta di halaman undangan **hanya muncul bila koordinat sudah terisi**. Bila
+  kosong, bagian peta disembunyikan.
+- Tamu tetap mendapat tombol **"Buka di Google Maps"** yang mengarah ke rute
+  menuju koordinat tersebut (redirect ke Google Maps).
+- Bila koordinat kosong, tombol Google Maps memakai isian **Google Maps
+  (URL/alamat)** sebagai cadangan.
+- Klik **Hapus titik** untuk mengosongkan koordinat.
+
 ---
 
 ## 3. Mengunggah undangan & musik sendiri

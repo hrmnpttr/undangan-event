@@ -116,9 +116,129 @@
                 @include('filament.pages.partials.field', ['name' => 'event_date_text', 'label' => 'Tanggal (teks bebas)', 'placeholder' => 'Sabtu, 12 Juli 2026'])
                 @include('filament.pages.partials.field', ['name' => 'event_time_text', 'label' => 'Waktu', 'placeholder' => '10.00 WIB – selesai'])
                 @include('filament.pages.partials.field', ['name' => 'venue_name', 'label' => 'Nama lokasi'])
-                @include('filament.pages.partials.field', ['name' => 'venue_maps', 'label' => 'Google Maps (URL / alamat pencarian)'])
+                @include('filament.pages.partials.field', ['name' => 'venue_maps', 'label' => 'Google Maps (URL / alamat) — opsional', 'placeholder' => 'dipakai bila koordinat kosong'])
             </div>
             @include('filament.pages.partials.field', ['name' => 'venue_address', 'label' => 'Alamat lengkap', 'textarea' => true])
+
+            {{-- Free map picker (OpenStreetMap / Leaflet — tanpa biaya, tanpa API key) --}}
+            @assets
+                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+                    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+                    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+            @endassets
+
+            <div class="rounded-lg border border-dashed border-gray-300 dark:border-white/10 p-4 space-y-3"
+                 wire:ignore
+                 x-data="venueMap({ lat: @js($venue_lat), lng: @js($venue_lng) })" x-init="init()">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Titik lokasi acara (peta gratis)</h3>
+                    <button type="button" x-show="lat && lng" x-on:click="clear()" class="text-xs text-danger-600 hover:underline">Hapus titik</button>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                    Cari nama tempat, <strong>klik di peta</strong>, atau tempel koordinat. Peta di undangan hanya
+                    muncul bila koordinat terisi. Peta memakai OpenStreetMap (gratis); tombol di undangan tetap
+                    bisa membuka Google Maps.
+                </p>
+
+                {{-- Search --}}
+                <div class="flex gap-2">
+                    <input type="text" x-model="q" x-on:keydown.enter.prevent="search()" placeholder="Cari lokasi, mis. Gedung Sasana Budaya Ganesha Bandung"
+                        class="flex-1 rounded-lg border-gray-300 dark:border-white/10 dark:bg-white/5 text-sm">
+                    <button type="button" x-on:click="search()"
+                        class="rounded-lg bg-primary-600 px-4 py-2 text-sm text-white hover:bg-primary-500">Cari</button>
+                </div>
+
+                {{-- Map --}}
+                <div x-ref="map" class="h-64 w-full rounded-lg overflow-hidden ring-1 ring-gray-200 dark:ring-white/10" style="background:#e5e7eb;"></div>
+
+                {{-- Coordinate paste / display --}}
+                <div class="flex items-center gap-2">
+                    <label class="text-xs text-gray-500 shrink-0">Koordinat (lat, lng)</label>
+                    <input type="text" x-model="coord" x-on:change="parseCoord()" placeholder="-6.200000, 106.816666"
+                        class="flex-1 rounded-lg border-gray-300 dark:border-white/10 dark:bg-white/5 text-sm font-mono">
+                </div>
+            </div>
+
+            <script>
+                window.venueMap = function (initial) {
+                    return {
+                        q: '',
+                        lat: initial.lat ? parseFloat(initial.lat) : null,
+                        lng: initial.lng ? parseFloat(initial.lng) : null,
+                        coord: (initial.lat && initial.lng) ? (initial.lat + ', ' + initial.lng) : '',
+                        map: null, marker: null,
+
+                        loadLeaflet() {
+                            return new Promise((resolve) => {
+                                if (window.L) return resolve();
+                                const t = setInterval(() => { if (window.L) { clearInterval(t); resolve(); } }, 60);
+                            });
+                        },
+
+                        async init() {
+                            await this.loadLeaflet();
+                            const hasPt = Number.isFinite(this.lat) && Number.isFinite(this.lng);
+                            const start = hasPt ? [this.lat, this.lng] : [-2.5, 118];
+                            this.map = L.map(this.$refs.map).setView(start, hasPt ? 15 : 4);
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                maxZoom: 19, attribution: '&copy; OpenStreetMap'
+                            }).addTo(this.map);
+                            if (hasPt) this.setMarker(this.lat, this.lng, false);
+                            this.map.on('click', (e) => this.apply(e.latlng.lat, e.latlng.lng));
+                            // Redraw once the container has its final size.
+                            setTimeout(() => this.map.invalidateSize(), 200);
+                        },
+
+                        parseCoord() {
+                            const p = (this.coord || '').split(',').map((s) => parseFloat(s.trim()));
+                            if (p.length === 2 && Number.isFinite(p[0]) && Number.isFinite(p[1])) {
+                                this.apply(p[0], p[1], true);
+                            }
+                        },
+
+                        apply(lat, lng, fromInput = false) {
+                            this.lat = lat; this.lng = lng;
+                            if (!fromInput) this.coord = lat.toFixed(6) + ', ' + lng.toFixed(6);
+                            this.setMarker(lat, lng, true);
+                            // Deferred: no network per click; sent to the server on Save.
+                            this.$wire.set('venue_lat', String(lat), false);
+                            this.$wire.set('venue_lng', String(lng), false);
+                        },
+
+                        setMarker(lat, lng, pan) {
+                            const icon = L.divIcon({
+                                className: '',
+                                html: '<div style="font-size:26px;line-height:1">📍</div>',
+                                iconSize: [26, 26], iconAnchor: [13, 26]
+                            });
+                            if (this.marker) this.marker.setLatLng([lat, lng]);
+                            else this.marker = L.marker([lat, lng], { icon }).addTo(this.map);
+                            if (pan) this.map.setView([lat, lng], Math.max(this.map.getZoom(), 15));
+                        },
+
+                        async search() {
+                            if (!this.q) return;
+                            try {
+                                const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(this.q);
+                                const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                                const d = await r.json();
+                                if (d && d[0]) this.apply(parseFloat(d[0].lat), parseFloat(d[0].lon));
+                                else alert('Lokasi tidak ditemukan. Coba kata kunci lain atau klik langsung di peta.');
+                            } catch (e) {
+                                alert('Gagal mencari lokasi. Periksa koneksi internet.');
+                            }
+                        },
+
+                        clear() {
+                            this.lat = null; this.lng = null; this.coord = '';
+                            if (this.marker) { this.map.removeLayer(this.marker); this.marker = null; }
+                            this.$wire.set('venue_lat', '', false);
+                            this.$wire.set('venue_lng', '', false);
+                        },
+                    };
+                };
+            </script>
 
             <div class="grid gap-4 sm:grid-cols-2">
                 @include('filament.pages.partials.field', ['name' => 'quote', 'label' => 'Kutipan / ayat pembuka', 'textarea' => true])

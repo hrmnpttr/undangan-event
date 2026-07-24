@@ -150,6 +150,8 @@ class LandingConfig
             'venue_name'      => '',   // display name of venue
             'venue_address'   => '',   // full address
             'venue_maps'      => '',   // maps URL or search query
+            'venue_lat'       => '',   // latitude (free OSM map + Google redirect)
+            'venue_lng'       => '',   // longitude
 
             // Wedding-specific
             'groom_name'      => '',
@@ -309,6 +311,28 @@ class LandingConfig
         }
 
         return null;
+    }
+
+    /**
+     * Parsed venue coordinates [lat, lng], or null when unset/invalid.
+     */
+    public static function coords(): ?array
+    {
+        $lat = (string) self::get('venue_lat', '');
+        $lng = (string) self::get('venue_lng', '');
+
+        if ($lat === '' || $lng === '' || ! is_numeric($lat) || ! is_numeric($lng)) {
+            return null;
+        }
+
+        $lat = (float) $lat;
+        $lng = (float) $lng;
+
+        if ($lat < -90 || $lat > 90 || $lng < -180 || $lng > 180) {
+            return null;
+        }
+
+        return [$lat, $lng];
     }
 
     /**

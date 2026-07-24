@@ -58,6 +58,11 @@ class DesainUndangan extends Page
 
     public bool $show_default_cover = true;
 
+    /** Venue coordinates (free OpenStreetMap picker + Google Maps redirect). */
+    public ?string $venue_lat = null;
+
+    public ?string $venue_lng = null;
+
     // ---- Uploads ----------------------------------------------------------
 
     public $musicUpload = null;
@@ -95,6 +100,10 @@ class DesainUndangan extends Page
         $this->agenda = LandingConfig::jsonArray('agenda');
         $this->music_autoplay = LandingConfig::truthy('music_autoplay', true);
         $this->show_default_cover = LandingConfig::truthy('show_default_cover', true);
+
+        $coords = LandingConfig::coords();
+        $this->venue_lat = $coords ? (string) $coords[0] : (($all['venue_lat'] ?? '') ?: null);
+        $this->venue_lng = $coords ? (string) $coords[1] : (($all['venue_lng'] ?? '') ?: null);
     }
 
     /** Templates grouped for the selector. */
@@ -162,9 +171,20 @@ class DesainUndangan extends Page
             'contentUpload' => 'nullable|image|max:8192',
             'heroPhotoUpload' => 'nullable|image|max:8192',
             'galleryUpload.*' => 'nullable|image|max:8192',
+            'venue_lat' => 'nullable|numeric|between:-90,90',
+            'venue_lng' => 'nullable|numeric|between:-180,180',
         ], [
             'musicUpload.mimes' => 'Musik latar harus berupa berkas .mp3.',
+            'venue_lat.numeric' => 'Latitude harus berupa angka (mis. -6.200000).',
+            'venue_lng.numeric' => 'Longitude harus berupa angka (mis. 106.816666).',
         ]);
+
+        // Coordinates are kept as a pair: save both or clear both.
+        $lat = is_numeric($this->venue_lat) ? (string) $this->venue_lat : '';
+        $lng = is_numeric($this->venue_lng) ? (string) $this->venue_lng : '';
+        if ($lat === '' || $lng === '') {
+            $lat = $lng = '';
+        }
 
         $values = [
             'template' => array_key_exists($this->template, LandingConfig::templates())
@@ -173,6 +193,8 @@ class DesainUndangan extends Page
             'music_autoplay' => $this->music_autoplay,
             'show_default_cover' => $this->show_default_cover,
             'agenda' => $this->cleanAgenda(),
+            'venue_lat' => $lat,
+            'venue_lng' => $lng,
         ];
 
         foreach (self::TEXT_KEYS as $key) {
