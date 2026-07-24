@@ -17,6 +17,12 @@ anniversary celebration, it is fully configurable for any event.
 
 ## Features
 
+- **Invitation designer & templates (no code):** pick a ready-made template —
+  weddings (Islamic / Christian / Catholic / Buddhist), corporate events, or a
+  tech meetup — or go fully **Custom** with your own image/HTML. Upload your own
+  **background music (mp3 only)**, cover image, main photo, and gallery, and fill
+  in event content (schedule/agenda, quote, venue) from **Desain Undangan** in
+  the admin panel. See the [usage guide](docs/INVITATION-GUIDE.md).
 - **Digital invitation per guest** at `/i/{code}` with a unique code, bilingual
   (English / Indonesian), animated entry cover, and background music.
 - **RSVP / confirmation:** number of attendees, "cannot attend" option, and a
