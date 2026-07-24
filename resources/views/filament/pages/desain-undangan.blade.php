@@ -57,14 +57,21 @@
                 </label>
             </div>
 
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+                Satu gambar dipakai untuk tampilan HP &amp; desktop (di-crop otomatis mengikuti layar).
+                Rasio tetap sama di semua perangkat, jadi utamakan gambar <strong>portrait</strong> (mobile-first).
+                Ukuran berkas maks 8&nbsp;MB — idealnya di bawah 1&nbsp;MB agar cepat dibuka.
+            </p>
+
             <div class="grid gap-5 sm:grid-cols-3">
                 @foreach([
-                    ['coverUpload', 'cover_image', 'Gambar sampul (amplop)'],
-                    ['contentUpload', 'content_image', 'Gambar detail / isi'],
-                    ['heroPhotoUpload', 'hero_photo', 'Foto utama (mempelai / acara)'],
-                ] as [$prop, $key, $label])
+                    ['coverUpload', 'cover_image', 'Gambar sampul (amplop)', '1080 × 1440 px · portrait (3:4)'],
+                    ['contentUpload', 'content_image', 'Gambar detail / isi', '1080 × 1350 px · portrait (4:5)'],
+                    ['heroPhotoUpload', 'hero_photo', 'Foto utama (mempelai / acara)', '800 × 800 px · persegi (1:1)'],
+                ] as [$prop, $key, $label, $hint])
                     <div class="space-y-1">
                         <label class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $label }}</label>
+                        <p class="text-[11px] text-gray-400">Saran: {{ $hint }}</p>
                         @if($this->currentAsset($key))
                             <img src="{{ $this->currentAsset($key) }}" class="h-24 w-full rounded-lg object-cover ring-1 ring-gray-200">
                             <button type="button" wire:click="clearAsset('{{ $key }}')" class="text-xs text-danger-600 hover:underline">Hapus</button>
@@ -79,6 +86,7 @@
             {{-- Gallery --}}
             <div class="space-y-2">
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Galeri foto (opsional, bisa banyak)</label>
+                <p class="text-[11px] text-gray-400">Saran: 1000 × 1000 px · persegi (1:1) — ditampilkan sebagai grid.</p>
                 <input type="file" wire:model="galleryUpload" multiple accept="image/*"
                     class="block w-full text-xs text-gray-600 dark:text-gray-300 file:mr-2 file:rounded-md file:border-0 file:bg-primary-50 file:px-2 file:py-1 file:text-primary-700">
                 @if(count($this->galleryImages()))

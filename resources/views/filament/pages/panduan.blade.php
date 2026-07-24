@@ -31,6 +31,22 @@
             <li>Klik <strong>Simpan Desain</strong>. Perubahan langsung tampil di halaman undangan.</li>
         </ol>
 
+        <h3>Ukuran gambar yang disarankan</h3>
+        <p>Satu gambar dipakai untuk HP &amp; desktop (di-crop otomatis) — <strong>tidak ada upload versi mobile terpisah</strong>. Utamakan gambar <strong>portrait</strong>, maks 8&nbsp;MB.</p>
+        <table>
+            <thead>
+                <tr><th>Bidang</th><th>Ukuran</th><th>Orientasi</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Gambar sampul (amplop)</td><td>1080 × 1440 px (3:4)</td><td>Portrait</td></tr>
+                <tr><td>Gambar detail / isi</td><td>1080 × 1350 px (4:5)</td><td>Portrait</td></tr>
+                <tr><td>Foto utama</td><td>800 × 800 px (1:1)</td><td>Persegi</td></tr>
+                <tr><td>Galeri foto</td><td>1000 × 1000 px (1:1)</td><td>Persegi</td></tr>
+                <tr><td>Gambar bagikan (OG)</td><td>1200 × 630 px</td><td>Landscape</td></tr>
+            </tbody>
+        </table>
+        <p class="text-sm">Letakkan bagian penting gambar di <strong>tengah</strong> agar tidak terpotong saat menyesuaikan layar.</p>
+
         <h2>Langkah 3 — Daftar tamu</h2>
         <ol>
             <li>Buka menu <strong>Tamu</strong>, tambahkan tamu satu per satu atau impor dari Excel.</li>

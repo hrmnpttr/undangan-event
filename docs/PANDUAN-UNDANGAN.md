@@ -86,6 +86,30 @@ Ingin mendesain sendiri sepenuhnya? Pilih template **Kustom**, unggah gambar
 undangan Anda, atau tempel **HTML** pada kolom "HTML Kustom". Form RSVP tetap
 muncul otomatis di bawahnya.
 
+### Ukuran & orientasi gambar yang disarankan
+
+Satu gambar dipakai untuk **HP dan desktop** sekaligus — sistem meng-crop
+otomatis (`object-cover`) mengikuti layar, jadi **tidak ada upload versi mobile
+terpisah**. Karena undangan bersifat *mobile-first*, utamakan gambar
+**portrait**. Berkas maks **8 MB**; idealnya < 1 MB agar cepat dibuka.
+
+| Bidang | Ukuran disarankan | Orientasi | Rasio | Catatan |
+|--------|-------------------|-----------|-------|---------|
+| **Gambar sampul (amplop)** | 1080 × 1440 px | Portrait | 3:4 | Tampil penuh di layar sampul. HP: dipotong 3:4; desktop: melebar (± 16:10) |
+| **Gambar detail / isi** | 1080 × 1350 px | Portrait | 4:5 | Gambar tambahan (template klasik) |
+| **Foto utama** | 800 × 800 px | Persegi | 1:1 | Ditampilkan bulat di header — pusatkan wajah/objek |
+| **Galeri foto** | 1000 × 1000 px | Persegi | 1:1 | Grid; semua item dipotong ke persegi |
+| **Gambar bagikan (OG)** *(opsional, via `.env`)* | 1200 × 630 px | Landscape | 1.91:1 | Pratinjau saat link dibagikan (WhatsApp/medsos) |
+
+> **Tips crop otomatis:** bagian gambar yang paling penting sebaiknya di
+> **tengah**, karena tepi bisa terpotong saat menyesuaikan layar. Jika ingin
+> teks tidak terpotong, cukup ketikkan teksnya di kolom konten (Judul, Tanggal,
+> dsb.) alih-alih menaruhnya di dalam gambar.
+
+> **Butuh gambar berbeda untuk desktop (landscape) & HP (portrait)?** Fitur
+> upload dua-versi belum tersedia di perancang; hubungi pengelola bila
+> diperlukan.
+
 ---
 
 ## 4. Template yang tersedia

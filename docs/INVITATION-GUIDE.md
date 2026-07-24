@@ -61,6 +61,29 @@ Want full control? Pick the **Custom** template and either upload your own
 invitation image or paste **HTML** into the "Custom HTML" box. The RSVP form is
 still appended below it automatically.
 
+### Recommended image sizes & orientation
+
+A single image is used for **both mobile and desktop** — it is cropped
+automatically (`object-cover`) to fit the screen, so **there is no separate
+mobile-image upload**. Since invitations are *mobile-first*, prefer **portrait**
+images. Max file size **8 MB**; aim for < 1 MB for fast loading.
+
+| Field | Recommended size | Orientation | Ratio | Notes |
+|-------|------------------|-------------|-------|-------|
+| **Cover image (envelope)** | 1080 × 1440 px | Portrait | 3:4 | Full-screen cover. Mobile crops to 3:4; desktop widens (~16:10) |
+| **Detail / content image** | 1080 × 1350 px | Portrait | 4:5 | Extra image (classic template) |
+| **Main photo** | 800 × 800 px | Square | 1:1 | Shown as a circle in the header — center the subject |
+| **Gallery** | 1000 × 1000 px | Square | 1:1 | Grid; every item is cropped square |
+| **Share/OG image** *(optional, via `.env`)* | 1200 × 630 px | Landscape | 1.91:1 | Link preview (WhatsApp/social) |
+
+> **Auto-crop tip:** keep the important part of the image **centered** — edges
+> may be trimmed to fit the screen. To avoid clipped text, type it into the
+> content fields (Title, Date, …) rather than baking it into the image.
+
+> **Need different desktop (landscape) and mobile (portrait) images?** A
+> two-variant upload isn't available in the designer yet — ask the maintainer if
+> you need it.
+
 ---
 
 ## 4. Available templates
