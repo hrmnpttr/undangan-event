@@ -7,6 +7,7 @@ use App\Models\Konfirmasi;
 use App\Models\Peserta;
 use App\Models\Setting;
 use App\Models\Tamu;
+use App\Support\LandingConfig;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -149,6 +150,11 @@ class Undangan extends Component
         $this->maxTanggalDatang = $eventDate->format('Y-m-d');
         $this->minTanggalPulang = $eventDate->format('Y-m-d');
         $this->maxTanggalPulang = $eventDate->copy()->addDays(15)->format('Y-m-d');
+
+        // When the entry cover is disabled, open the invitation directly.
+        if (! LandingConfig::truthy('show_default_cover', true)) {
+            $this->entered = true;
+        }
     }
 
     /**
@@ -576,8 +582,27 @@ class Undangan extends Component
             ? 'Dear ' . $this->tamu->nama . ' – you are cordially invited to ' . __('undangan.event_title') . '.'
             : 'Kepada Yth. ' . $this->tamu->nama . ' – Anda diundang dalam ' . __('undangan.event_title') . '.';
 
+        // Landing template + branding (all admin-configurable via settings).
+        $template = LandingConfig::template();
+        $landingTheme = LandingConfig::themeFor($template);
+        $galleryImages = collect(LandingConfig::jsonArray('gallery'))
+            ->map(fn ($p) => LandingConfig::urlFor((string) $p))
+            ->filter()
+            ->values()
+            ->all();
+
         return view('livewire.undangan', [
             'contactPersons' => $contactPersons,
+            'template'       => $template,
+            'theme'          => $landingTheme,
+            'landing'        => LandingConfig::all(),
+            'musicUrl'       => LandingConfig::musicUrl(),
+            'musicAutoplay'  => LandingConfig::truthy('music_autoplay', true),
+            'coverImage'     => LandingConfig::assetUrl('cover_image'),
+            'contentImage'   => LandingConfig::assetUrl('content_image'),
+            'heroPhoto'      => LandingConfig::assetUrl('hero_photo'),
+            'galleryImages'  => $galleryImages,
+            'agenda'         => LandingConfig::jsonArray('agenda'),
         ])->layout('layouts.undangan', [
             'ogTitle'       => __('undangan.event_title'),
             'ogDescription' => $ogDescription,

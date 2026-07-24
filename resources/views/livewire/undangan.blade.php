@@ -1,101 +1,51 @@
 <div class="min-h-screen flex flex-col">
-    {{-- Audio Player --}}
-    <audio id="bg-audio" loop preload="auto" wire:ignore>
-        <source src="{{ asset('storage/audio/background.mp3') }}" type="audio/mpeg">
-    </audio>
-    <script>
-        (function () {
-            function startAudio() {
-                var a = document.getElementById('bg-audio');
-                if (a && a.paused) {
-                    a.play().catch(function () {});
-                }
-                document.removeEventListener('click', startAudio);
-                document.removeEventListener('touchstart', startAudio);
-                document.removeEventListener('scroll', startAudio);
-            }
-            var audio = document.getElementById('bg-audio');
-            if (audio) {
-                audio.play().catch(function () {
-                    document.addEventListener('click', startAudio, { once: true });
-                    document.addEventListener('touchstart', startAudio, { once: true });
-                    document.addEventListener('scroll', startAudio, { once: true });
-                });
-            }
-        })();
-    </script>
+    {{-- Apply the selected template's colour palette. --}}
+    <style>
+        :root {
+            --u-accent: {{ $theme['accent'] ?? '#b8860b' }};
+            --u-accent-strong: {{ $theme['accent_strong'] ?? '#8a5a00' }};
+            --u-bg: {{ $theme['bg'] ?? 'linear-gradient(135deg,#fdf2f8 0%,#fef3c7 50%,#fdf2f8 100%)' }};
+        }
+    </style>
+
+    @php
+        $tpl = fn (string $part) => view()->exists("undangan.templates.$template.$part")
+            ? "undangan.templates.$template.$part"
+            : "undangan.templates.generic.$part";
+    @endphp
+
+    {{-- Audio Player (uploaded track, else bundled default). --}}
+    @if($musicUrl)
+        <audio id="bg-audio" loop preload="auto" wire:ignore>
+            <source src="{{ $musicUrl }}" type="audio/mpeg">
+        </audio>
+        @if($musicAutoplay)
+            <script>
+                (function () {
+                    function startAudio() {
+                        var a = document.getElementById('bg-audio');
+                        if (a && a.paused) { a.play().catch(function () {}); }
+                        document.removeEventListener('click', startAudio);
+                        document.removeEventListener('touchstart', startAudio);
+                        document.removeEventListener('scroll', startAudio);
+                    }
+                    var audio = document.getElementById('bg-audio');
+                    if (audio) {
+                        audio.play().catch(function () {
+                            document.addEventListener('click', startAudio, { once: true });
+                            document.addEventListener('touchstart', startAudio, { once: true });
+                            document.addEventListener('scroll', startAudio, { once: true });
+                        });
+                    }
+                })();
+            </script>
+        @endif
+    @endif
 
     {{-- Entry Overlay --}}
     @if(!$entered)
-        @php
-            $locale = app()->getLocale();
-            $imgPrefix = config('undangan.image_prefix');
-            $imgLang = $locale === 'en' ? config('undangan.image_lang_en') : config('undangan.image_lang_id');
-            $undanganImg = fn (string $n, string $big = '') => $imgPrefix
-                ? asset('storage/' . $imgPrefix . $imgLang . $n . $big . '.png')
-                : null;
-            $coverImage      = $undanganImg('1');
-            $contentImage    = $undanganImg('2');
-            $coverImageBig   = $undanganImg('1', 'big');
-            $contentImageBig = $undanganImg('2', 'big');
-        @endphp
-        <div class="fixed inset-0 z-50 overflow-y-auto" style="background: linear-gradient(135deg, #fdf2f8 0%, #fef3c7 50%, #fdf2f8 100%);">
-            <div class="undangan-entry-wrap mx-auto py-6 px-4 space-y-6">
-            {{-- Image 1: Invitation Cover with name overlay --}}
-            <div class="relative rounded-2xl overflow-hidden shadow-2xl" style="box-shadow: 0 8px 32px rgba(180,140,60,0.25), 0 2px 8px rgba(0,0,0,0.10);">
-                <picture>
-                    @if($coverImageBig)<source media="(min-width: 768px)" srcset="{{ $coverImageBig }}">@endif
-                    <img src="{{ $coverImage ?: asset('favicon.svg') }}" class="w-full" alt="{{ __('undangan.event_title') }}">
-                </picture>
-                {{-- Name overlay: mobile –centered gold frame box --}}
-                <div class="absolute undangan-overlay-mobile" style="top: 57%; left: 50%; transform: translateX(-50%); width: 62%; text-align: center; overflow: hidden;">
-                    <p class="text-gray-600 leading-tight" style="font-size: clamp(0.5rem, 2.4vw, 0.85rem);">{{ $locale === 'en' ? 'Dearest' : 'Kepada Yth.' }}</p>
-                    @if(str_starts_with($tamu->nama, 'Keluarga'))
-                        <p class="font-display font-bold text-gray-800 leading-tight mt-0.5" style="font-size: clamp(0.6rem, 3vw, 1.1rem); word-break: break-word; overflow-wrap: break-word;">Keluarga</p>
-                        <p class="font-display font-bold text-gray-800 leading-tight" style="font-size: clamp(0.6rem, 3vw, 1.1rem); word-break: break-word; overflow-wrap: break-word;">{{ trim(substr($tamu->nama, 8)) }}</p>
-                    @else
-                        <p class="font-display font-bold text-gray-800 leading-tight mt-0.5" style="font-size: clamp(0.6rem, 3vw, 1.1rem); word-break: break-word; overflow-wrap: break-word;">{{ $tamu->nama }}</p>
-                    @endif
-                    @if(!empty($tamu->deskripsi))
-                        <p class="text-gray-700 mt-0.5" style="font-size: clamp(0.5rem, 2.4vw, 0.9rem); word-break: break-word; overflow-wrap: break-word;">{{ $tamu->deskripsi }}</p>
-                    @endif
-                </div>
-                {{-- Name overlay: desktop – gold frame box in lower-right of landscape image --}}
-                <div class="absolute undangan-overlay-desktop" style="top: 58%; left: 50%; transform: translateX(-50%); width: 42%; text-align: center;">
-                    <p class="text-gray-600 leading-tight" style="font-size: clamp(0.65rem, 1vw, 0.85rem);">{{ $locale === 'en' ? 'Dearest' : 'Kepada Yth.' }}</p>
-                    @if(str_starts_with($tamu->nama, 'Keluarga'))
-                        <p class="font-display font-bold text-gray-800 leading-tight mt-0.5" style="font-size: clamp(0.8rem, 1.2vw, 1.1rem); word-break: break-word; overflow-wrap: break-word;">Keluarga</p>
-                        <p class="font-display font-bold text-gray-800 leading-tight" style="font-size: clamp(0.8rem, 1.2vw, 1.1rem); word-break: break-word; overflow-wrap: break-word;">{{ trim(substr($tamu->nama, 8)) }}</p>
-                    @else
-                        <p class="font-display font-bold text-gray-800 leading-tight mt-0.5" style="font-size: clamp(0.8rem, 1.2vw, 1.1rem); word-break: break-word; overflow-wrap: break-word;">{{ $tamu->nama }}</p>
-                    @endif
-                    @if(!empty($tamu->deskripsi))
-                        <p class="text-gray-700 mt-0.5" style="font-size: clamp(0.65rem, 1vw, 0.85rem); word-break: break-word; overflow-wrap: break-word;">{{ $tamu->deskripsi }}</p>
-                    @endif
-                </div>
-            </div>
-
-            {{-- Image 2: Invitation Content --}}
-            <div class="rounded-2xl overflow-hidden shadow-2xl" style="box-shadow: 0 8px 32px rgba(180,140,60,0.25), 0 2px 8px rgba(0,0,0,0.10);">
-                <picture>
-                    @if($contentImageBig)<source media="(min-width: 768px)" srcset="{{ $contentImageBig }}">@endif
-                    <img src="{{ $contentImage ?: asset('favicon.svg') }}" class="w-full" alt="{{ __('undangan.event_title') }}">
-                </picture>
-            </div>
-
-            <style>
-                .undangan-entry-wrap { max-width: 24rem; }
-                .undangan-overlay-desktop { display: none; }
-                @media (min-width: 768px) {
-                    .undangan-entry-wrap { max-width: 56rem; }
-                    .undangan-overlay-mobile { display: none; }
-                    .undangan-overlay-desktop { display: block; }
-                }
-            </style>
-
-            {{-- Bottom padding so content isn't hidden behind floating button --}}
-            <div class="h-28"></div>
-            </div>{{-- end max-w-sm --}}
+        <div class="fixed inset-0 z-50 overflow-y-auto" style="background: var(--u-bg);">
+            @include($tpl('cover'))
 
             {{-- Floating CTA Button --}}
             <div class="fixed bottom-0 left-0 right-0 z-10 pb-6 pt-8 flex flex-col items-center gap-3"
@@ -104,7 +54,7 @@
                     {{-- Already confirmed: show view + download options --}}
                     <button
                         wire:click="enter"
-                        onclick="document.getElementById('bg-audio').play().catch(()=>{})"
+                        onclick="var a=document.getElementById('bg-audio'); if(a){a.play().catch(()=>{})}"
                         class="btn-gold px-10 py-4 rounded-full text-lg shadow-xl inline-flex items-center gap-2"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,7 +74,7 @@
                         @if(!$isExpired)
                             <button
                                 wire:click="enter"
-                                onclick="document.getElementById('bg-audio').play().catch(()=>{}); setTimeout(()=>{ @this.call('toggleForm') }, 300)"
+                                onclick="var a=document.getElementById('bg-audio'); if(a){a.play().catch(()=>{})} setTimeout(()=>{ @this.call('toggleForm') }, 300)"
                                 class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium border-2 border-gray-400 text-gray-600 bg-white hover:bg-gray-50 shadow"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,7 +88,7 @@
                     {{-- Not yet confirmed --}}
                     <button
                         wire:click="enter"
-                        onclick="document.getElementById('bg-audio').play().catch(()=>{})"
+                        onclick="var a=document.getElementById('bg-audio'); if(a){a.play().catch(()=>{})}"
                         class="btn-gold px-10 py-4 rounded-full text-lg shadow-xl"
                     >
                         {{ __('undangan.konfirmasi_button') }}
@@ -152,24 +102,19 @@
     <div class="flex-1 px-4 py-8 max-w-lg mx-auto w-full space-y-6 {{ !$entered ? 'hidden' : '' }}">
 
         {{-- Audio Control --}}
-        <div class="fixed top-4 right-4 z-40">
-            <button
-                onclick="const a=document.getElementById('bg-audio'); if(a.paused){a.play();this.innerHTML='🔊'}else{a.pause();this.innerHTML='🔇'}"
-                class="glass-card w-10 h-10 rounded-full flex items-center justify-center text-lg shadow-md"
-            >
-                🔊
-            </button>
-        </div>
+        @if($musicUrl)
+            <div class="fixed top-4 right-4 z-40">
+                <button
+                    onclick="const a=document.getElementById('bg-audio'); if(!a)return; if(a.paused){a.play();this.innerHTML='🔊'}else{a.pause();this.innerHTML='🔇'}"
+                    class="glass-card w-10 h-10 rounded-full flex items-center justify-center text-lg shadow-md"
+                >
+                    🔊
+                </button>
+            </div>
+        @endif
 
-        {{-- Header --}}
-        <div class="text-center space-y-2 pt-4">
-            <h1 class="font-display text-2xl md:text-3xl font-bold text-gray-800">
-                {{ __('undangan.event_title') }}
-            </h1>
-            <p class="font-display text-base text-amber-700 italic">
-                {{ __('undangan.tagline') }}
-            </p>
-        </div>
+        {{-- Template hero / header --}}
+        @include($tpl('hero'))
 
         {{-- Color indicator for VIP/VVIP (no text, just colored accent) --}}
         @if($tamu->jenis !== 'umum')
@@ -191,6 +136,9 @@
                 {{ __('undangan.undangan_untuk', ['count' => $tamu->jumlah_orang]) }}
             </p>
         </div>
+
+        {{-- Template detail blocks (quote, schedule/agenda, venue, gallery) --}}
+        @include($tpl('details'))
 
         {{-- Flash Messages --}}
         @if(session()->has('success'))

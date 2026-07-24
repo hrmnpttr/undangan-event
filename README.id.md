@@ -18,6 +18,12 @@ dikonfigurasi untuk acara apa pun.
 
 ## Fitur
 
+- **Perancang undangan & template (tanpa koding):** pilih template siap pakai —
+  pernikahan (Islam / Kristen / Katolik / Buddha), acara perusahaan, atau tech
+  meetup — atau **Kustom** dengan gambar/HTML sendiri. Unggah **musik latar
+  (khusus mp3)**, gambar sampul, foto utama, dan galeri, serta isi konten acara
+  (rundown/agenda, kutipan, lokasi) dari menu **Desain Undangan** di panel admin.
+  Lihat [panduan penggunaan](docs/PANDUAN-UNDANGAN.md).
 - **Undangan digital per tamu** di `/i/{kode}` dengan kode unik, dwibahasa
   (Inggris / Indonesia), sampul pembuka beranimasi, dan musik latar.
 - **RSVP / konfirmasi:** jumlah yang hadir, opsi "tidak dapat hadir", dan batas
